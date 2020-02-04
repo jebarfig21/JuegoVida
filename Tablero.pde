@@ -1,3 +1,4 @@
+import java.lang.Math; 
 public class Tablero{
   
   private Celula[][] celulas;
@@ -25,11 +26,6 @@ public class Tablero{
     return celulas[x][y];//ancho,alto
   }
   
-  //Regresa matriz bidimensional de celdas(tablero de celdad)
-  public Celula[][] getCelulas(){
-   return this.celulas;
-  }
-  
   
   
   //Dibuja la cuadirucla con las lineas en el color pasado por parametro
@@ -37,14 +33,11 @@ public class Tablero{
   public void dibujaCuadricula(int colorLinea){
     stroke(colorLinea);
     strokeWeight(1);
-
-    for(int i=0; i <= alto ; i++)//lineas horizontales
+    for(int i=0; i <= alto ; i++){
     line(0, i*anchoCelula, ancho*anchoCelula, i*anchoCelula);
-    
-    for(int i=0; i <= ancho ; i++)//lineas verticales
     line(i*anchoCelula, 0, i*anchoCelula, alto*anchoCelula);
+    }
   }
-  
   
   public void dibujaCelula(int colorCelula, Celula celula){
     fill(colorCelula);
@@ -70,66 +63,71 @@ public class Tablero{
            | 6 | 5 | 4 |
             -----------
       */
-      
-private void decision(int vecinos, Celula celula){
+
+private void decision(Celula celula){
   
  if (celula.estado){
-   if (vecinos > 3) celula.estado=false;//muerte por sobrepoblacion
+   if (celula.vecinos > 3) celula.estado=false;//muerte por sobrepoblacion
    //if (vecinos == 3 || vecinos == 2) celula.estado=true;//Se mantiene viva
-   if (vecinos < 2) celula.estado=false;//muerte por soledad
+   if (celula.vecinos < 2) celula.estado=false;//muerte por soledad
  }
  
- else if (!celula.estado && vecinos != 3 ){
-   celula.estado=false;//con exactamente tres la celula se vuelve true(se activa)
+ else if (!celula.estado && celula.vecinos == 3 ){
+   celula.estado=true;//con exactamente tres la celula se vuelve true(se activa)
  
 }
-else{celula.estado=true;}
-}
 
+}
 private int mod(int a, int b){//a%b Altero la operacion de modulo para este problema
   a=a%b;
   if(a<0)a+=b;
   return a;
 }
       
-public void estadoSiguiente(Celula c_aux){
+public void calculaVecinos(Celula c_aux){
   
   int x = c_aux.getX();
   int y = c_aux.getY();
   int suma = 0;
-  
-  System.out.println("Original"+getCelula(x,y));
      
-    System.out.println("Caso 0 "+getCelula(mod((x-1),ancho),mod((y-1),alto)));
     if(getCelula(mod((x-1),ancho),mod((y-1),alto)).estado) suma++;//0
                    
-    System.out.println("Caso 1 "+getCelula(x,mod((y-1),alto)));
     if(getCelula(x,mod((y-1),alto)).estado) suma++;//1
                  
-    System.out.println("Caso 2 "+getCelula(mod((x+1),ancho),mod((y-1),alto)));
     if(getCelula(mod((x+1),ancho),mod((y-1),alto)).estado) suma++;//2
                  
-    System.out.println("Caso 3 "+getCelula(mod((x+1),ancho),y));
     if(getCelula(mod((x+1),ancho),y).estado) suma++;//3
                    
-    System.out.println("Caso 4 "+getCelula((x+1)%ancho,(y+1)%alto));
     if(getCelula(mod((x+1),ancho),mod((y+1),alto)).estado) suma++;//4
                    
-    System.out.println("Caso 5 "+getCelula(x,mod((y+1),alto)));
     if(getCelula(x,mod((y+1),alto)).estado) suma++;//5
                    
-    System.out.println("Caso 6 "+getCelula(mod((x-1),ancho),mod((y+1),alto)));
     if(getCelula(mod((x-1),ancho),mod((y+1),alto)).estado) suma++;//6
-                   
-                  
-    System.out.println("Caso 7 "+getCelula(mod((x-1),ancho),y));
+    
     if(getCelula(mod((x-1),ancho),y).estado) suma++;//7
-          
-    decision(suma, c_aux);
+    
+    c_aux.vecinos = suma;
   }
   
- public void generaLinena(int x, int y){
-   Celula celula = getCelula(x,y);
+ public void generaLinea(int x, int y){
+   getCelula(x,y).setEstado(true);
+   getCelula(x+1,y).setEstado(true);
+   getCelula(x-1,y).setEstado(true);
+   
+}
+
+public void generaAleatorios(int n){
+  int x ;
+  int y ;
+  if (n>=ancho*alto) n = ancho*alto/2;
+    for(int i = 0; i < n;i++){
+      do{ 
+      x = (int)random(0,ancho-1);
+      y = (int)random(0,alto-1);}
+      while(this.getCelula(x,y).estado);
+      this.getCelula(x,y).setEstado(true);
+    }
+    
 }
   
 }

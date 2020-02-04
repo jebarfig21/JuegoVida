@@ -2,11 +2,13 @@ public class Celula{
 private int x;
 private int y;
 private boolean estado;
+private int vecinos;
 
 public Celula(int x, int y){
   this.x=x;
   this.y=y;
   this.estado=false;
+  this.vecinos=0;
 }
 
 public int getX(){
@@ -15,6 +17,10 @@ public int getX(){
 
 public int getY(){
   return this.y;
+}
+
+public int getVecinos(){
+  return this.vecinos;
 }
 
 public boolean getEstado(){
