@@ -6,6 +6,7 @@ int celda = 5;          // Tamanio de cada celda cuadrada (en pixeles).
 int prendidas = 140;      // Cantidad de celdas con estado 1.
 int colorTrue = #00ff00;
 int colorFalse = #0000ff;
+int colorBackground = #000000;
 Tablero tablero = new Tablero(ancho,alto,celda);
   
 public void settings() {
@@ -15,7 +16,7 @@ public void settings() {
 //Establezcamos los valores iniciales
 void setup(){
   
-  background(#000000);//Fondo
+  background(colorBackground);//Fondo
   tablero.dibujaCuadricula(255);
   tablero.generaAleatorios(6000);
 
